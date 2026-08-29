@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز الرياضيات - الصف الحادي عشر</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+  body { background: linear-gradient(135deg, #1e3c72, #2a5298); min-height: 100vh; color: #fff; padding: 15px; }
+  .container { max-width: 1100px; margin: auto; }
+  header { text-align: center; padding: 20px 0; }
+  header h1 { font-size: 2em; margin-bottom: 10px; }
+  header p { font-size: 1.1em; opacity: 0.9; }
+  
+  .grid { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 20px; }
+  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  
+  .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); }
+  .card h2 { color: #ffd700; margin-bottom: 15px; font-size: 1.3em; text-align: center; }
+  
+  .topic-btn { display: block; width: 100%; padding: 15px; margin: 8px 0; background: rgba(255,255,255,0.15); border: none; border-radius: 10px; color: #fff; font-size: 1em; cursor: pointer; text-align: right; transition: 0.3s; }
+  .topic-btn:hover, .topic-btn:active { background: #ffd700; color: #1e3c72; transform: scale(1.02); }
+  
+  .calc-input { width: 100%; padding: 15px; border-radius: 10px; border: none; font-size: 1.1em; margin-bottom: 10px; }
+  .calc-btn { width: 100%; padding: 15px; background: #ffd700; color: #1e3c72; border: none; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; }
+  .calc-btn:active { background: #ffed4e; }
+  #calcResult { margin-top: 15px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; text-align: center; font-size: 1.3em; color: #ffd700; min-height: 50px; }
+  
+  .quiz-q { margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+  .quiz-q p { margin-bottom: 10px; font-weight: bold; }
+  .quiz-option { display: block; width: 100%; padding: 12px; margin: 8px 0; background: rgba(255,255,255,0.1); border: 2px solid transparent; border-radius: 8px; color: #fff; font-size: 1em; cursor: pointer; text-align: right; transition: 0.3s; }
+  .quiz-option:active, .quiz-option.selected { background: rgba(255,215,0,0.3); border-color: #ffd700; }
+  .quiz-btn { width: 100%; padding: 15px; background: #ffd700; color: #1e3c72; border: none; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 10px; }
+  #quizResult { margin-top: 15px; padding: 15px; border-radius: 10px; text-align: center; font-size: 1.2em; font-weight: bold; display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1> مركز الرياضيات</h1>
+    <p>الصف الحادي عشر - مسار 5 وحدات (806)</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2> مواضيع المنهاج</h2>
+      <button class="topic-btn" onclick="openTopic('trig')">🔺 المثلث المثلثي (טריגונומטריה)</button>
+      <button class="topic-btn" onclick="openTopic('seq')"> المتتابعات (סדרות)</button>
+      <button class="topic-btn" onclick="openTopic('complex')">🌀 الأعداد المركبة (מרוכבים)</button>
+      <button class="topic-btn" onclick="openTopic('log')"> الدوال اللوغاريتمية (לוגריתמים)</button>
+      <button class="topic-btn" onclick="openTopic('calc')">∫ التفاضل والتكامل (חדו"א)</button>
+      <button class="topic-btn" onclick="openTopic('geo')">📍 الهندسة التحليلية</button>
+    </div>
+
+    <div class="card">
+      <h2>🧮 حاسبة سريعة</h2>
+      <input type="text" class="calc-input" id="calcInput" placeholder="مثال: 25 * 4 + 10">
+      <button class="calc-btn" onclick="calculate()">احسب</button>
+      <div id="calcResult">النتيجة ستظهر هنا</div>
+    </div>
+
+    <div class="card">
+      <h2>✍️ اختبر نفسك</h2>
+      <div class="quiz-q">
+        <p>1) ما قيمة sin(30°)؟</p>
+        <button class="quiz-option" onclick="selectAnswer('q1', 'a', this)">1</button>
+        <button class="quiz-option" onclick="selectAnswer('q1', 'b', this)">0.5</button>
+        <button class="quiz-option" onclick="selectAnswer('q1', 'c', this)">√3/2</button>
+      </div>
+      <div class="quiz-q">
+        <p>2) المتتابعة: 2, 4, 8, 16,... ما الحد الخامس؟</p>
+        <button class="quiz-option" onclick="selectAnswer('q2', 'a', this)">24</button>
+        <button class="quiz-option" onclick="selectAnswer('q2', 'b', this)">32</button>
+        <button class="quiz-option" onclick="selectAnswer('q2', 'c', this)">64</button>
+      </div>
+      <div class="quiz-q">
+        <p>3) ما قيمة log₂(8)؟</p>
+        <button class="quiz-option" onclick="selectAnswer('q3', 'a', this)">2</button>
+        <button class="quiz-option" onclick="selectAnswer('q3', 'b', this)">3</button>
+        <button class="quiz-option" onclick="selectAnswer('q3', 'c', this)">4</button>
+      </div>
+      <button class="quiz-btn" onclick="checkQuiz()">تصحيح الإجابات</button>
+      <div id="quizResult"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const answers = {};
+  function selectAnswer(q, val, btn) {
+    answers[q] = val;
+    const siblings = btn.parentElement.querySelectorAll('.quiz-option');
+    siblings.forEach(s => s.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+  
+  function calculate() {
+    const input = document.getElementById('calcInput').value;
+    const result = document.getElementById('calcResult');
+    try {
+      if (!/^[\d+\-*/().\s]+$/.test(input)) throw 'معادلة غير صالحة';
+      result.textContent = 'النتيجة: ' + eval(input);
+    } catch(e) { result.textContent = '⚠️ ' + e; }
+  }
+
+  function checkQuiz() {
+    const correct = { q1: 'b', q2: 'b', q3: 'b' };
+    let score = 0;
+    for (let q in correct) {
+      if (answers[q] === correct[q]) score++;
+    }
+    const res = document.getElementById('quizResult');
+    res.style.display = 'block';
+    res.textContent = `نتيجتك: ${score} / 3`;
+    res.style.background = score === 3 ? '#4caf50' : score >= 2 ? '#ff9800' : '#f44336';
+  }
+
+  function openTopic(topic) {
+    const topics = {
+      trig: '🔺 المثلث المثلثي - قريباً: درس تفاعلي كامل!',
+      seq: '🔢 المتتابعات - قريباً: درس تفاعلي كامل!',
+      complex: '🌀 الأعداد المركبة - قريباً: درس تفاعلي كامل!',
+      log: '📈 اللوغاريتمات - قريباً: درس تفاعلي كامل!',
+      calc: ' التفاضل والتكامل - قريباً: درس تفاعلي كامل!',
+      geo: ' الهندسة التحليلية - قريباً: درس تفاعلي كامل!'
+    };
+    alert(topics[topic]);
+  }
+</script>
+</body>
+</html>
